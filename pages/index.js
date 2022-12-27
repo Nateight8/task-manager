@@ -3,14 +3,29 @@ import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "../styles/Home.module.css";
 import Container from "@mui/material/Container";
-import { Typography, Box, Grid, Paper, Stack, Button } from "@mui/material";
-import MainHeader from "../Components/MainHeader";
-import Hero from "../Components/Hero/Hero";
-import BestSellers from "../Components/BestSellers/BestSellers";
+import {
+  Typography,
+  Box,
+  Grid,
+  Paper,
+  Stack,
+  Button,
+  Drawer,
+  AppBar,
+  Toolbar,
+  // makeStyles,
+} from "@mui/material";
+
+import { makeStyles } from "@mui/styles";
+import MainContent from "../Components/MainComponent/MainContent";
+import ModalComponent from "../Components/Modal.jsx/ModalComponent";
 
 const inter = Inter({ subsets: ["latin"] });
+const drawerWidth = 240;
 
 export default function Home() {
+  const classes = useStyles();
+
   return (
     <>
       <Head>
@@ -20,12 +35,38 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Container maxWidth="xl">
-          <MainHeader text="FURNITURE FOR NOW OR FOREVER" />
-          <Hero />
-          <BestSellers />
-        </Container>
+        <AppBar position="fixed" sx={{ background: "#2c2c38" }}>
+          <Toolbar>
+            <Typography variant="h6"></Typography>
+          </Toolbar>
+        </AppBar>
+        <div className={classes.root}>
+          {/* <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            anchor="left"
+            classes={{ paper: classes.drawerPaper }}
+          >
+            hello
+          </Drawer> */}
+
+          <MainContent />
+        </div>
+        <ModalComponent />
       </main>
     </>
   );
 }
+
+const useStyles = makeStyles({
+  drawer: {
+    width: drawerWidth,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    background: "#2c2c38",
+  },
+  root: {
+    display: "flex",
+  },
+});
