@@ -1,10 +1,20 @@
-import { Box, Modal, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Modal,
+  Typography,
+  Button,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import React from "react";
 import CustomInputComp from "./CustomInputComp";
 import TextFieldCom from "./TextFieldCom";
 import AddIcon from "@mui/icons-material/Add";
+import SelectComp from "./SelectComp";
+import { Form, Field, Formik } from "formik";
+import { FormControl, InputBase, InputLabel, styled } from "@mui/material";
 
-function ModalComponent() {
+function ModalComponent({ isSubmitting, open, setOpen }) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -32,34 +42,90 @@ function ModalComponent() {
     },
   };
 
+  const CustomInput = styled(InputBase)(({ theme }) => ({
+    "label + &": {
+      marginTop: theme.spacing(3),
+      color: "white",
+    },
+
+    "& .MuiInputBase-input": {
+      border: "1px solid  rgba(255, 255, 255, 0.1)",
+      padding: "10px 12px",
+      borderRadius: 4,
+    },
+  }));
+
+  const CustomSelect = styled(Select)(({ theme }) => ({
+    "label + &": {
+      marginTop: theme.spacing(3),
+      color: "white",
+    },
+
+    "& .MuiInputBase-input": {
+      border: "1px solid  rgba(255, 255, 255, 0.2)",
+      padding: "10px 12px",
+      borderRadius: 4,
+    },
+  }));
+
   return (
-    <Modal open={true}>
-      <Box sx={style}>
-        <Typography variant="h6" sx={{ fontSize: "1.15rem", fontWeight: 400 }}>
-          Add New Task
-        </Typography>
-        <form style={{ marginTop: "1.25rem" }}>
-          <CustomInputComp label="Title" placeholder="e.g take coffea break" />
-          <CustomInputComp
-            label="Description"
-            placeholder="e.g it is always good to ..."
-          />
+    // <Form>
+    <>
+      <Modal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      >
+        <Box sx={style}>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "1.15rem", fontWeight: 400 }}
+          >
+            Add New Task
+          </Typography>
 
-          <TextFieldCom />
+          <Form>
+            <CustomInputComp
+              label="title"
+              placeholder="e.g make coffee"
+              name="title"
+              type="text"
+            />
+            <CustomInputComp
+              label="description"
+              placeholder="e.g it is always good to take a break..."
+              name="description"
+              type="text"
+              multiline
+              minRows={3}
+            />
 
-          <form>
             <Button
+              // type="submit"
               variant="contained"
-              sx={btnStyle}
+              sx={{ ...btnStyle }}
               fullWidth
-              startIcon={<AddIcon />}
             >
-              Add Sub Task
+              add subtask
             </Button>
-          </form>
-        </form>
-      </Box>
-    </Modal>
+
+            <SelectComp name="status" />
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ ...btnStyle, marginTop: "1rem", background: "#645fc6" }}
+              fullWidth
+            >
+              Create Task
+            </Button>
+          </Form>
+          {/* )}
+        </Formik> */}
+        </Box>
+      </Modal>
+    </>
+    // </Form>
   );
 }
 

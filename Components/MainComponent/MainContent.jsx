@@ -1,5 +1,5 @@
 import { Box, Grid, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Task from "./Task";
 import TaskStateHeader from "./TaskStateHeader";
 
@@ -11,12 +11,12 @@ function MainContent() {
         {/* todo */}
         <Grid item xs={4} p={2}>
           <TaskStateHeader status="Todo" color="#43c7e9" />
-
+          {/* {console.log(values)} */}
           <Box sx={{ height: "100vh", background: "" }}>
             <Grid container>
               <Task />
-              <Task />
-              <Task />
+              {/* <Task />
+              <Task /> */}
             </Grid>
           </Box>
         </Grid>

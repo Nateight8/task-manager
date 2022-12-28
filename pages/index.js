@@ -19,13 +19,17 @@ import {
 import { makeStyles } from "@mui/styles";
 import MainContent from "../Components/MainComponent/MainContent";
 import ModalComponent from "../Components/Modal.jsx/ModalComponent";
+import { Formik } from "formik";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 const drawerWidth = 240;
 
 export default function Home() {
   const classes = useStyles();
-
+  const [open, setOpen] = useState(false);
+  const [submittedValues, setsubmittedValues] = useState([]);
+  const [xyz, setxyz] = useState([]);
   return (
     <>
       <Head>
@@ -37,22 +41,60 @@ export default function Home() {
       <main>
         <AppBar position="fixed" sx={{ background: "#2c2c38" }}>
           <Toolbar>
-            <Typography variant="h6"></Typography>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              sx={{ width: "100%" }}
+            >
+              <Typography variant="h4">Platform</Typography>
+              <Box>
+                <Button
+                  variant="contained"
+                  sx={{
+                    background: "#6360c7",
+                    borderRadius: "2rem",
+                    textTransform: "capitalize",
+                    fontWeight: 400,
+                  }}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  //  startIcon={}
+                >
+                  Add New Task
+                </Button>
+              </Box>
+            </Stack>
           </Toolbar>
         </AppBar>
+
         <div className={classes.root}>
-          {/* <Drawer
+          <Drawer
             className={classes.drawer}
             variant="permanent"
             anchor="left"
             classes={{ paper: classes.drawerPaper }}
           >
             hello
-          </Drawer> */}
+          </Drawer>
 
           <MainContent />
         </div>
-        <ModalComponent />
+
+        <Formik
+          initialValues={{ title: "", description: "", status: "" }}
+          onSubmit={(values, actions) => {
+            setxyz([values]);
+            setsubmittedValues(...xyz, submittedValues);
+            setOpen(false);
+          }}
+        >
+          {({ values }) => (
+            <ModalComponent open={open} setOpen={setOpen} props={values} />
+          )}
+        </Formik>
+        {console.log(submittedValues)}
+        {/* {(props) => (  <ModalComponent />)} */}
       </main>
     </>
   );
