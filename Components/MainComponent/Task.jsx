@@ -1,31 +1,71 @@
-import { Box, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { useFormikContext } from "formik";
 import React, { useState } from "react";
+import ViewModal from "../ViewModal/ViewModal";
 
-function Task() {
-  const [todo, setTodo] = useState({
-    title: "Build UI for onboarding flow onboarding flow",
-    descrition: "Take me home",
-  });
+function Task({ title, subtasks, description }) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Grid item xs={12} p={1}>
-      <Box
+      {/* <Box
         sx={{
           background: "#2c2c38",
           padding: "1.24rem",
           borderRadius: "0.5em",
         }}
+      > */}
+      <ListItemButton
+        onClick={() => {
+          setOpen(true);
+        }}
+        sx={{
+          background: "#2c2c38",
+          padding: "1.24rem",
+          borderRadius: "0.5em",
+          border: "1px solid #2c2c38",
+          "&:hover": {
+            background: "#2c2c38",
+            border: "1px solid #645fc6",
+            // color: "#2c2c38",
+          },
+        }}
       >
-        <Typography
-          variant="h6"
-          sx={{ fontSize: "18px", fontWeight: 400, opacity: 0.9 }}
-        >
-          {todo.title}
-        </Typography>
-        <Typography sx={{ opacity: 0.6, fontWeight: 300 }} variant="body1">
-          0 of 3 subtasks
-        </Typography>
-      </Box>
+        <ListItemText
+          sx={{
+            // "	.MuiListItemText-root": {
+            //   color: "black",
+            // },
+
+            ".MuiListItemText-primary": {
+              fontSize: "18px",
+              fontWeight: 400,
+              opacity: 0.9,
+            },
+            "	.MuiListItemText-secondary": {
+              opacity: 0.6,
+              fontWeight: 300,
+              color: "white",
+            },
+          }}
+          primary={title}
+          secondary={`0 of ${subtasks.length} subtasks`}
+        />
+      </ListItemButton>
+      <ViewModal
+        setOpen={setOpen}
+        open={open}
+        subtasks={subtasks}
+        description={description}
+        title={title}
+      />
     </Grid>
   );
 }

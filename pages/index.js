@@ -21,6 +21,7 @@ import MainContent from "../Components/MainComponent/MainContent";
 import ModalComponent from "../Components/Modal.jsx/ModalComponent";
 import { Formik } from "formik";
 import { useState } from "react";
+import ViewModal from "../Components/ViewModal/ViewModal";
 
 const inter = Inter({ subsets: ["latin"] });
 const drawerWidth = 240;
@@ -28,8 +29,10 @@ const drawerWidth = 240;
 export default function Home() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [submittedValues, setsubmittedValues] = useState([]);
-  const [xyz, setxyz] = useState([]);
+  const [formValues, setFormValues] = useState([]);
+  const [subTask, setsubTask] = useState([]);
+
+  // console.log(formValues);
   return (
     <>
       <Head>
@@ -38,7 +41,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <Container maxWidth="xl" sx={{ overflowX: "none" }}>
         <AppBar position="fixed" sx={{ background: "#2c2c38" }}>
           <Toolbar>
             <Stack
@@ -69,33 +72,42 @@ export default function Home() {
         </AppBar>
 
         <div className={classes.root}>
-          <Drawer
+          {/* <Drawer
             className={classes.drawer}
             variant="permanent"
             anchor="left"
             classes={{ paper: classes.drawerPaper }}
           >
             hello
-          </Drawer>
+          </Drawer> */}
 
-          <MainContent />
+          <MainContent formValues={formValues} subTask={subTask} />
         </div>
 
         <Formik
-          initialValues={{ title: "", description: "", status: "" }}
-          onSubmit={(values, actions) => {
-            setxyz([values]);
-            setsubmittedValues(...xyz, submittedValues);
+          initialValues={{
+            title: "",
+            description: "",
+            status: "",
+            subtasks: [""],
+          }}
+          onSubmit={(values, onSubmitProps) => {
+            setFormValues([...formValues, values]);
             setOpen(false);
+            onSubmitProps.resetForm();
           }}
         >
           {({ values }) => (
-            <ModalComponent open={open} setOpen={setOpen} props={values} />
+            <ModalComponent
+              open={open}
+              setOpen={setOpen}
+              props={values}
+              subTask={subTask}
+              setsubTask={setsubTask}
+            />
           )}
         </Formik>
-        {console.log(submittedValues)}
-        {/* {(props) => (  <ModalComponent />)} */}
-      </main>
+      </Container>
     </>
   );
 }
