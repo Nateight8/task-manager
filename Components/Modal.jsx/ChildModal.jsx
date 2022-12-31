@@ -102,7 +102,9 @@ function ChildModal({
         </FormControl>
         <Button
           sx={btnStyle}
-          onClick={() => push("")}
+          onClick={() => {
+            push(""), setOpenSubTask(false);
+          }}
           variant="contained"
           type="submit"
         >
