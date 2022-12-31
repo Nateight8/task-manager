@@ -81,7 +81,12 @@ export default function Home() {
             hello
           </Drawer> */}
 
-          <MainContent formValues={formValues} subTask={subTask} />
+          <MainContent
+            formValues={formValues}
+            subTask={subTask}
+            // checkedTasks={checkedTasks}
+            // setcheckedTasks={setcheckedTasks}
+          />
         </div>
 
         <Formik

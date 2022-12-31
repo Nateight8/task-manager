@@ -1,29 +1,26 @@
 import {
   Box,
+  Button,
   Checkbox,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
   Modal,
   Typography,
 } from "@mui/material";
+import { Field, Form, Formik } from "formik";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function ViewModal({ setOpen, open, title, description, subtasks }) {
-  const [checked, setChecked] = useState([0]);
-
-  //   const handleToggle = () => {
-  //     const currentIndex = checked.indexOf(subtasks);
-  //     const newChecked = [...checked];
-  //     currentIndex === -1
-  //       ? newChecked.push(subtasks)
-  //       : newChecked.splice(currentIndex, 1);
-  //     setChecked(newChecked);
-  //   };
-
+function ViewModal({
+  setOpen,
+  open,
+  title,
+  description,
+  subtasks,
+  setcheckedTasks,
+}) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -38,7 +35,30 @@ function ViewModal({ setOpen, open, title, description, subtasks }) {
     borderRadius: "0.5rem",
   };
 
-  //   console.log(formValues);
+  const labelStyle = {
+    background: "#21212d",
+    width: "100%",
+    border: "1px solid #21212d",
+    marginY: "0.3rem",
+    "&:hover": {
+      background: "#21212d",
+      border: "1px solid #645fc6",
+    },
+  };
+
+  const btnStyle = {
+    borderRadius: "2rem",
+    background: "#2c2c38",
+    border: "1px solid  rgba(255, 255, 255, 0.1)",
+    textTransform: "capitalize",
+    fontWeight: 400,
+
+    "&:hover": {
+      background: "white",
+      color: "#2c2c38",
+    },
+  };
+  //   console.log(checkedTasks);
   return (
     <Modal
       open={open}
@@ -60,62 +80,105 @@ function ViewModal({ setOpen, open, title, description, subtasks }) {
         >
           {description}
         </Typography>
-
-        <Box sx={{ paddingY: "0.8rem" }}>
-          <Typography
-            variant="h6"
-            sx={{ fontSize: "16px", fontWeight: 400, marginBottom: "0rem" }}
-          >
-            Sub Tasks (3 of 3)
-          </Typography>
-          <List sx={{ paddingY: "1rem" }}>
-            {subtasks.map((subtasks) => (
-              <ListItem
-                key={subtasks}
-                sx={{ paddingBottom: "0.5rem" }}
-                disablePadding
-              >
-                <ListItemButton
-                  role={undefined}
-                  //   onClick={handleToggle(value)}
-                  dense
-                  sx={{ background: "#21212d", width: "100%" }}
+        <Formik
+          initialValues={{
+            tasks: [""],
+          }}
+          onSubmit={(values) => {
+            setcheckedTasks(values.tasks.length);
+            setOpen(false);
+          }}
+        >
+          {({ values, handleChange, setFieldValue }) => (
+            <Form>
+              <FormControl sx={{ paddingY: "0.8rem", width: "100%" }}>
+                <FormLabel
+                  variant="h6"
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: 400,
+                    marginBottom: "0rem",
+                    color: "white",
+                  }}
                 >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      //   checked={checked.indexOf(subtasks) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      //   onChange={handleToggle(subtasks)}
-                      // inputProps={{ "aria-labelledby": labelId }}
+                  {` Sub Tasks (${values.tasks.length} of ${subtasks.length})`}
+                </FormLabel>
+                <FormGroup
+                  sx={{ paddingY: "1rem", width: "100%", paddingX: "0.5rem" }}
+                >
+                  {subtasks.map((value) => (
+                    <FormControlLabel
+                      key={value}
+                      sx={labelStyle}
+                      label={value}
+                      control={
+                        <Field name="tasks" type="checkbox" value={value}>
+                          {({ field }) => (
+                            <Checkbox
+                              //   value={value}
+                              {...field}
+                              checked={values.tasks.includes(value)}
+                              onChange={(event) => {
+                                handleChange(event);
+                                // If the checkbox is checked, add the value to the favoriteColors array
+                                if (event.target.checked) {
+                                  setFieldValue("tasks", [
+                                    ...values.tasks,
+                                    event.target.value,
+                                  ]);
+                                }
+                                // If the checkbox is not checked, remove the value from the favoriteColors array
+                                else {
+                                  setFieldValue(
+                                    "tasks",
+                                    values.tasks.filter(
+                                      (value) => value !== event.target.value
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+                          )}
+                        </Field>
+                      }
                     />
-                  </ListItemIcon>
-                  <ListItemText sx={{ opacity: 0.6 }} primary={subtasks} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+                  ))}
+                </FormGroup>
 
-          <Box>
-            <Typography variant="body1">Status</Typography>
-            <Box
-              mt={1}
-              sx={{
-                border: "1px solid  rgba(255, 255, 255, 0.1)",
-                width: "100%",
-                // height: "3rem",
-              }}
-            >
-              <Typography
-                variant="body1"
-                sx={{ padding: "0.5rem", opacity: 0.7 }}
+                <Box>
+                  <Typography variant="body1">Status</Typography>
+                  <Box
+                    mt={1}
+                    sx={{
+                      border: "1px solid  rgba(255, 255, 255, 0.1)",
+                      width: "100%",
+                      // height: "3rem",
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      sx={{ padding: "0.5rem", opacity: 0.7 }}
+                    >
+                      {values.tasks.length === 0
+                        ? "Todo"
+                        : values.tasks.length === subtasks.length
+                        ? "Complete"
+                        : "Doing"}
+                    </Typography>
+                  </Box>
+                </Box>
+              </FormControl>
+              <Button
+                fullWidth
+                sx={{ ...btnStyle, marginTop: "1rem", background: "#645fc6" }}
+                type="submit"
+                variant="contained"
               >
-                Doing
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
+                Update Status
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Box>
     </Modal>
   );

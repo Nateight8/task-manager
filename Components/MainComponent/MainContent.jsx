@@ -26,6 +26,8 @@ function MainContent({ formValues, subTask }) {
                   subtasks={subtasks}
                   description={description}
                   title={title}
+                  // checkedTasks={checkedTasks}
+                  // setcheckedTasks={setcheckedTasks}
                 />
               ))}
             </Grid>

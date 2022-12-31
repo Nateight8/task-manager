@@ -12,6 +12,7 @@ import ViewModal from "../ViewModal/ViewModal";
 
 function Task({ title, subtasks, description }) {
   const [open, setOpen] = useState(false);
+  const [checkedTasks, setcheckedTasks] = useState(0);
 
   return (
     <Grid item xs={12} p={1}>
@@ -56,7 +57,7 @@ function Task({ title, subtasks, description }) {
             },
           }}
           primary={title}
-          secondary={`0 of ${subtasks.length} subtasks`}
+          secondary={`${checkedTasks} subtasks of ${subtasks.length} subtasks`}
         />
       </ListItemButton>
       <ViewModal
@@ -65,6 +66,8 @@ function Task({ title, subtasks, description }) {
         subtasks={subtasks}
         description={description}
         title={title}
+        checkedTasks={checkedTasks}
+        setcheckedTasks={setcheckedTasks}
       />
     </Grid>
   );
