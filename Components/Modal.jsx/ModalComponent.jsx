@@ -28,7 +28,7 @@ function ModalComponent({ isSubmitting, open, setOpen, subTask, setsubTask }) {
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "background.paper",
-    // border: "2px solid #000",
+
     boxShadow: 24,
     p: 4,
     background: "#2c2c38",
@@ -48,8 +48,6 @@ function ModalComponent({ isSubmitting, open, setOpen, subTask, setsubTask }) {
     },
   };
 
-  // console.log(fields);
-  // console.log(subTask);
   return (
     // <Form>
     <>

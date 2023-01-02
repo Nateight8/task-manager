@@ -59,6 +59,8 @@ function ViewModal({
     },
   };
   //   console.log(checkedTasks);
+  const [taskValues, setTaskValues] = useState("");
+
   return (
     <Modal
       open={open}
@@ -82,11 +84,13 @@ function ViewModal({
         </Typography>
         <Formik
           initialValues={{
-            tasks: [""],
+            tasks: [],
           }}
           onSubmit={(values) => {
             setcheckedTasks(values.tasks.length);
             setOpen(false);
+            console.log(values);
+            // setTaskValues;
           }}
         >
           {({ values, handleChange, setFieldValue }) => (
